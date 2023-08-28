@@ -14,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.marvel_app.R
 
 @Composable
 fun LoadingView(
@@ -32,7 +34,19 @@ fun LoadingView(
 @Composable
 fun LoadingItem() {
     CircularProgressIndicator(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .wrapContentWidth(Alignment.CenterHorizontally)
+    )
+}
+
+@Composable
+fun EmptyItem() {
+    Text(
+        text= stringResource(R.string.no_more_data_msg),
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(16.dp)
             .wrapContentWidth(Alignment.CenterHorizontally)
     )

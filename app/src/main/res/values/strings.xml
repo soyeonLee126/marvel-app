@@ -6,6 +6,10 @@
     <string name="comice_title"> Comics : </string>
     <string name="urls_title"> Urls : </string>
 
-    //title
+    <!--    title-->
     <string name="top_bar_text_favourite"> favourites </string>
+
+    <!--    message-->
+    <string name="no_more_data_msg"> 더이상 로드 할 데이터가 없습니다 </string>
+
 </resources>
