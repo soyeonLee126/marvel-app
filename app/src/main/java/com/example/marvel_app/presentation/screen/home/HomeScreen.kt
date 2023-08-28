@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.marvel_app.domain.model.MarvelCharacter
+import com.example.marvel_app.presentation.listeners.clickListener
 import com.example.marvel_app.presentation.screen.component.CharacterListContent
 import com.example.marvel_app.presentation.screen.home.HomeTopBar
 import com.example.marvel_app.presentation.screen.home.HomeViewModel
@@ -23,6 +25,7 @@ import com.example.marvel_app.presentation.screen.likes.CharacterLikesViewModel
 fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel(), likeViewModel: CharacterLikesViewModel = hiltViewModel()) {
 
     val allCharacters = viewModel.getAllCharacterUseCase.collectAsLazyPagingItems()
+    val likeCharacters = likeViewModel.getLikeCharacters.collectAsLazyPagingItems()
 
     Scaffold(
         contentColor = MaterialTheme.colorScheme.surface,
@@ -30,7 +33,18 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
             HomeTopBar(navController)
         }) { innerPadding ->
         Box(Modifier.padding(innerPadding)) {
-            CharacterListContent(allCharacters, likeViewModel)
+            CharacterListContent(allCharacters, likeCharacters,
+                clickListener = object : clickListener {
+                    override fun likeListener(character: MarvelCharacter) {
+                        likeViewModel.addFavouriteCharacters(character)
+                    }
+
+                    override fun unLikeListener(character: MarvelCharacter) {
+                        likeViewModel.deleteCharacterFromFavourites(character)
+                    }
+
+                }
+            )
         }
     }
 }
