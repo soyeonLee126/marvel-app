@@ -9,6 +9,7 @@ import com.example.marvel_app.data.paging.LikeCharacterPagingSource
 import com.example.marvel_app.data.repository.dataSource.CharacterRemoteDataSource
 import com.example.marvel_app.domain.model.MarvelCharacter
 import com.example.marvel_app.domain.repository.CharacterRepository
+import com.example.marvel_app.util.Constants.LOAD_SIZE
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Singleton
 
@@ -20,9 +21,8 @@ class CharacterRepositoryImpl(
     override fun getAllCharacters(): Flow<PagingData<MarvelCharacter>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 20,
+                pageSize = LOAD_SIZE,
                 enablePlaceholders = false,
-                maxSize = 1000
             ),
             pagingSourceFactory = { CharacterPagingSource(remoteDataSource) }
         ).flow
@@ -30,9 +30,8 @@ class CharacterRepositoryImpl(
     override fun getfavouriteCharacterFromDB(): Flow<PagingData<MarvelCharacter>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 20,
+                pageSize = LOAD_SIZE,
                 enablePlaceholders = false,
-                maxSize = 100
             ),
             pagingSourceFactory = {  LikeCharacterPagingSource(characterDao) }
         ).flow
