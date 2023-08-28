@@ -8,11 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.marvel_app.domain.model.MarvelCharacter
-import com.example.marvel_app.presentation.listeners.clickListener
 import com.example.marvel_app.presentation.screen.component.CharacterListContent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -23,6 +22,7 @@ fun CharacterLikesScreen(
     viewModel: CharacterLikesViewModel = hiltViewModel(),
 ) {
     val allCharacters = viewModel.getLikeCharacters.collectAsLazyPagingItems()
+    val context = LocalContext.current
 
     Scaffold(
         contentColor = MaterialTheme.colorScheme.surface,
@@ -30,18 +30,7 @@ fun CharacterLikesScreen(
             CharacterLikesTopBar(navController)
         }) { innerPadding ->
         Box(Modifier.padding(innerPadding)) {
-            CharacterListContent(allCharacters, allCharacters, clickListener = object :
-                clickListener {
-                override fun likeListener(character: MarvelCharacter) {
-                    viewModel.addFavouriteCharacters(character)
-                }
-
-                override fun unLikeListener(character: MarvelCharacter) {
-                    viewModel.deleteCharacterFromFavourites(character)
-                }
-
-            }
-            )
+            CharacterListContent(allCharacters, allCharacters, viewModel, context = context)
         }
     }
 }

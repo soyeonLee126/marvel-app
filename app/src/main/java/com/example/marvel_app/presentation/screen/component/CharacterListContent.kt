@@ -1,8 +1,10 @@
 package com.example.marvel_app.presentation.screen.component
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -38,13 +40,15 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.marvel_app.R
 import com.example.marvel_app.domain.model.MarvelCharacter
-import com.example.marvel_app.presentation.listeners.clickListener
+import com.example.marvel_app.presentation.downloadManager.ImageDownloader
+import com.example.marvel_app.presentation.screen.likes.CharacterLikesViewModel
 
 @Composable
 fun CharacterListContent(
     character: LazyPagingItems<MarvelCharacter>,
     likeCharacter: LazyPagingItems<MarvelCharacter>,
-    clickListener: clickListener,
+    likesViewModel: CharacterLikesViewModel,
+    context: Context
 ) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
@@ -54,7 +58,8 @@ fun CharacterListContent(
                 CharacterListItem(
                     character = it,
                     isFavourite = likeCharacter.itemSnapshotList.find { character -> character?.id == it.id } != null,
-                    clickListener
+                    likesViewModel = likesViewModel,
+                    context = context
                 )
             }
         }
@@ -94,7 +99,7 @@ fun CharacterListContent(
 }
 
 @Composable
-fun CharacterListItem(character: MarvelCharacter, isFavourite: Boolean, clickListener: clickListener) {
+fun CharacterListItem(character: MarvelCharacter, isFavourite: Boolean, likesViewModel: CharacterLikesViewModel, context: Context) {
     val imageModifier = Modifier
         .size(150.dp)
         .border(BorderStroke(1.dp, Color.Black))
@@ -107,7 +112,6 @@ fun CharacterListItem(character: MarvelCharacter, isFavourite: Boolean, clickLis
         .width(120.dp)
 
     val imageUrl = character.thumbnail.path + "." + character.thumbnail.extension
-    //1011334
     var isUiFavourite  by rememberSaveable { mutableStateOf(isFavourite) }
     Card(
         modifier = Modifier
@@ -131,7 +135,11 @@ fun CharacterListItem(character: MarvelCharacter, isFavourite: Boolean, clickLis
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
-                modifier = imageModifier,
+                modifier = imageModifier.clickable( onClick = {
+                    val downloader = ImageDownloader(context = context)
+                    downloader.downloadImage(imageUrl, character.name)
+                }),
+
             )
             Column(
                 modifier = textModifier,
@@ -155,10 +163,10 @@ fun CharacterListItem(character: MarvelCharacter, isFavourite: Boolean, clickLis
                 onCheckedChange = {
                     isUiFavourite = !isUiFavourite
                     if (isUiFavourite){
-                        clickListener.likeListener(character)
+                        likesViewModel.addFavouriteCharacters(character)
                     }
                     else {
-                        clickListener.unLikeListener(character)
+                        likesViewModel.deleteCharacterFromFavourites(character)
                     }
                 }) {
                 Icon(

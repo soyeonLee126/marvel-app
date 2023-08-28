@@ -5,5 +5,6 @@ import com.example.marvel_app.domain.model.MarvelCharacter
 interface clickListener {
     fun likeListener(character: MarvelCharacter)
     fun unLikeListener(character: MarvelCharacter)
+    fun downLoadListener()
 
 }

@@ -98,6 +98,9 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
     implementation("com.google.code.gson:gson:2.9.0")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
+    //workmanager
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 }
 
 kapt {

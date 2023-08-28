@@ -25,6 +25,7 @@ class CharacterPagingSource(
             val hash = md5("$ts${BuildConfig.API_KEY_PRIVATE}${BuildConfig.API_KEY}")
 
             val response = characterDataSource.getAllCharacters(offset=offset, ts=ts, apiKey=BuildConfig.API_KEY, hash=hash)
+
             val characters = response.body()?.data?.results?.toMutableList() ?: emptyList()
             val nextPage = if (offset >= response.body()?.data?.total!!) null else page + 1
 
