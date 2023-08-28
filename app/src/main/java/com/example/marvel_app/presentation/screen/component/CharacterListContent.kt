@@ -1,6 +1,7 @@
 package com.example.marvel_app.presentation.screen.component
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -48,8 +49,10 @@ fun CharacterListContent(
     character: LazyPagingItems<MarvelCharacter>,
     likeCharacter: LazyPagingItems<MarvelCharacter>,
     likesViewModel: CharacterLikesViewModel,
+    isDeletable: Boolean,
     context: Context
 ) {
+    val isEndToast = stringResource(R.string.no_more_data_msg)
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
     ) {
@@ -59,7 +62,7 @@ fun CharacterListContent(
                     character = it,
                     isFavourite = likeCharacter.itemSnapshotList.find { character -> character?.id == it.id } != null,
                     likesViewModel = likesViewModel,
-                    context = context
+                    context = context,
                 )
             }
         }
@@ -92,6 +95,9 @@ fun CharacterListContent(
                             onClickRetry = { retry() }
                         )
                     }
+                }
+                loadState.append.endOfPaginationReached -> {
+                    Toast.makeText(context, isEndToast, Toast.LENGTH_SHORT).show()
                 }
             }
         }
