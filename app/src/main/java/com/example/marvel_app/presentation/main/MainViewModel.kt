@@ -8,5 +8,5 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor( private val characterUseCase: CharacterUseCases
 ) : ViewModel() {
-    val downloadImageUsecase = characterUseCase.getAllCharacterUseCase()
+
 }

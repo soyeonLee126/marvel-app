@@ -44,10 +44,12 @@ fun LoadingItem() {
 @Composable
 fun EmptyItem() {
     Text(
+        style = MaterialTheme.typography.bodySmall,
+        color = Color.White,
         text= stringResource(R.string.no_more_data_msg),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(20.dp)
             .wrapContentWidth(Alignment.CenterHorizontally)
     )
 }

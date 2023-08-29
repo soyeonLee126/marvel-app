@@ -1,0 +1,27 @@
+#[versions]
+#androidGradlePlugin = "8.1.0"
+#hilt-android = "2.44"
+#room-common = "2.5.2"
+#paging-common = "3.2.0"
+#hilt-navigation = "1.0.0"
+#androidx-core = "1.9.0"
+#androidx-appcompat = "1.6.1"
+#junit = "4.13.2"
+#ext-junit = "1.1.5"
+#espresso = "3.5.1"
+#
+#[libraries]
+#hilt-android = { moudule = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
+#room-common = { module = "androidx.room:room-common", version.ref = "room-common"}
+#paging-common = { module = "androidx.paging:paging-common-ktx", version.ref = "paging-common" }
+#hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose" , version.ref = "hilt-navigation"}
+#androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core"}
+#androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat"}
+#material = { module = "com.google.android.material:material", version.ref = "androidx-core" }
+#junit = { module = "junit:junit", version.ref="junit" }
+#ext-juniy = { module = "androidx.test.ext:junit", version.ref = "ext-junit" }
+#espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso"}
+#
+#
+#[plugins]
+#android-application = { id = "com.android.application", version.ref = "androidGradlePlugin"}

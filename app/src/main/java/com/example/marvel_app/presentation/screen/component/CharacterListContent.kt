@@ -1,7 +1,6 @@
 package com.example.marvel_app.presentation.screen.component
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,6 +25,7 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -49,10 +49,8 @@ fun CharacterListContent(
     character: LazyPagingItems<MarvelCharacter>,
     likeCharacter: LazyPagingItems<MarvelCharacter>,
     likesViewModel: CharacterLikesViewModel,
-    isDeletable: Boolean,
     context: Context
 ) {
-    val isEndToast = stringResource(R.string.no_more_data_msg)
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
     ) {
@@ -96,8 +94,13 @@ fun CharacterListContent(
                         )
                     }
                 }
+
                 loadState.append.endOfPaginationReached -> {
-                    Toast.makeText(context, isEndToast, Toast.LENGTH_SHORT).show()
+                    item { EmptyItem() }
+                }
+
+                loadState.prepend.endOfPaginationReached -> {
+                    item { LoadingItem() }
                 }
             }
         }
@@ -105,7 +108,12 @@ fun CharacterListContent(
 }
 
 @Composable
-fun CharacterListItem(character: MarvelCharacter, isFavourite: Boolean, likesViewModel: CharacterLikesViewModel, context: Context) {
+fun CharacterListItem(
+    character: MarvelCharacter,
+    isFavourite: Boolean,
+    likesViewModel: CharacterLikesViewModel,
+    context: Context
+) {
     val imageModifier = Modifier
         .size(150.dp)
         .border(BorderStroke(1.dp, Color.Black))
@@ -118,14 +126,19 @@ fun CharacterListItem(character: MarvelCharacter, isFavourite: Boolean, likesVie
         .width(120.dp)
 
     val imageUrl = character.thumbnail.path + "." + character.thumbnail.extension
-    var isUiFavourite  by rememberSaveable { mutableStateOf(isFavourite) }
+    var isUiFavourite by rememberSaveable { mutableStateOf(isFavourite) }
+
+    LaunchedEffect(isFavourite) {
+        isUiFavourite = isFavourite
+    }
+
     Card(
         modifier = Modifier
             .padding(top = 10.dp)
             .height(180.dp)
             .fillMaxWidth(),
 
-    ) {
+        ) {
         Row(
             modifier = Modifier
                 .height(IntrinsicSize.Max)
@@ -141,18 +154,18 @@ fun CharacterListItem(character: MarvelCharacter, isFavourite: Boolean, likesVie
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
-                modifier = imageModifier.clickable( onClick = {
+                modifier = imageModifier.clickable(onClick = {
                     val downloader = ImageDownloader(context = context)
                     downloader.downloadImage(imageUrl, character.name)
                 }),
 
-            )
+                )
             Column(
                 modifier = textModifier,
             ) {
                 character.name?.let {
                     Text(
-                        modifier= Modifier.padding(bottom = 4.dp),
+                        modifier = Modifier.padding(bottom = 4.dp),
                         style = MaterialTheme.typography.headlineSmall,
                         text = it
                     )
@@ -168,10 +181,9 @@ fun CharacterListItem(character: MarvelCharacter, isFavourite: Boolean, likesVie
                 checked = isUiFavourite,
                 onCheckedChange = {
                     isUiFavourite = !isUiFavourite
-                    if (isUiFavourite){
+                    if (isUiFavourite) {
                         likesViewModel.addFavouriteCharacters(character)
-                    }
-                    else {
+                    } else {
                         likesViewModel.deleteCharacterFromFavourites(character)
                     }
                 }) {

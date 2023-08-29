@@ -37,11 +37,11 @@ fun HomeScreen(
             HomeTopBar(navController)
         }) { innerPadding ->
         Box(Modifier.padding(innerPadding)) {
-            CharacterListContent(
-                allCharacters, likeCharacters,
-                likeViewModel,
-                context = context
-            )
+                CharacterListContent(
+                    allCharacters, likeCharacters,
+                    likeViewModel,
+                    context = context
+                )
         }
     }
 }
